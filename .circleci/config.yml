@@ -160,6 +160,7 @@ jobs:
             cat inventory.txt
       - run:
           name: Configure server with ansible
+          no_output_timeout: 30m
           command: |
             echo ENVIROMENT=production > "backend/.env"
             echo TYPEORM_CONNECTION=postgres >> "backend/.env"
@@ -245,6 +246,7 @@ jobs:
             cat inventory.txt
       - run:
           name: Build and deploy backend (remove node modules)
+          no_output_timeout: 30m
           command: |
 
             cd backend
