@@ -138,7 +138,7 @@ jobs:
           name: Ensure that the frontend infrastructure exists
           command: |
             aws cloudformation deploy \
-                --template-file .circleci/cloudfront.yml \
+                --template-file .circleci/files/cloudfront.yml \
                 --stack-name udapeople-cloudfront
       - destroy-environment
 
