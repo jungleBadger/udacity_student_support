@@ -58,5 +58,3 @@
     cd /home/ubuntu/backend
     pm2 start npm --name app -- start
 
-#    pm2 start -x -i 4 --name "app" ./dist/main.js
-# become: true
