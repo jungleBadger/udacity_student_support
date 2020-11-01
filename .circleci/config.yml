@@ -15,8 +15,7 @@ jobs:
     docker:
       - image: circleci/node:9.6.1
     steps:
-      - sayhello:
-          to: "kartik"
+      - sayhello
 
 workflows:
   default:
