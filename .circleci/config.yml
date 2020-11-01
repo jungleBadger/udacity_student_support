@@ -1,5 +1,6 @@
 version: 2.1
 
+
 commands:
   sayhello:
     description: " A very simple command for demonstrating the purposes for commands"
@@ -8,16 +9,19 @@ commands:
         type: string
         default: "Hello world"
     steps:
-      - run: echo << parameter.to >>
+      - run: echo << parameters.to >>
 
 jobs:
   test:
     docker:
       - image: circleci/node:9.6.1
     steps:
-      - sayhello
+      - sayhello:
+          to: "kartik"
+
 
 workflows:
   default:
     jobs:
       - test
+
