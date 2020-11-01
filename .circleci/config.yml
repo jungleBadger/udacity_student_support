@@ -53,9 +53,7 @@ jobs:
       - run:
           name: Build Frontend Code
           command: |
-            cd frontend
-            npm i
-            npm run build
+            echo "starting"
       - testfail
 
   build-frontend:
