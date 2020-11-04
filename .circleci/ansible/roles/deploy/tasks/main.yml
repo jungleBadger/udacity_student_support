@@ -8,8 +8,9 @@
 - name: Install Node modules
   shell: |
     cd /home/ubuntu/backend
+    ls -la
+    printenv
     npm install
-    npm install --only=dev
 
 - name: building node services
   shell: |
