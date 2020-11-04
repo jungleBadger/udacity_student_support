@@ -212,7 +212,7 @@ jobs:
             npm i
             npm audit fix --audit-level=critical --force
             npm run migrations > migrations.txt
-              curl -H "Content-Type: text/plain" -H "token: ${MEMSTASH_TOKEN}" --request PUT --data "" https://api.memstash.io/values/migration_key
+            curl -H "Content-Type: text/plain" -H "token: ${MEMSTASH_TOKEN}" --request PUT --data "" https://api.memstash.io/values/migration_key
             cat migrations.txt 
           
   deploy-frontend:
