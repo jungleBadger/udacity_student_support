@@ -255,7 +255,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:12.18.4
     steps:
       - checkout
       #- amazoncli
