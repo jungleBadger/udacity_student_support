@@ -3,13 +3,13 @@ version: 2.1
 ## Teams Notifications
 notify:
   webhooks:
-    - url: https://tuigroup.webhook.office.com/webhookb2/4272eeba-8711-466d-b641-82ce412a07b0@e3e1f65b-b973-440d-b61c-bc895fc98e28/CircleCI/8ed84a7e4a69414ca75b994adf69fe47/b01d9ac0-cc80-4c4a-9b9b-f69960dbdd86 
+    - url: https://tuigroup.webhook.office.com/webhookb2/4272eeba-8711-466d-b641-82ce412a07b0@e3e1f65b-b973-440d-b61c-bc895fc98e28/CircleCI/8ed84a7e4a69414ca75b994adf69fe47/b01d9ac0-cc80-4c4a-9b9b-f69960dbdd86
 
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here   
+      # Add parameter here
     steps:
       - run:
           name: Destroy environments
@@ -25,7 +25,7 @@ commands:
   # revert-migrations:
   #   description: Revert the last migration if successfully run in the current workflow.
   #   parameters:
-  #     # Add parameter here     
+  #     # Add parameter here
   #   steps:
   #     - run:
   #         name: Revert migrations
@@ -33,14 +33,14 @@ commands:
   #         command: |
   #           # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
   #           SUCCESS = 1
-  #           if(( $SUCCESS==1 )); 
+  #           if(( $SUCCESS==1 ));
   #           then
   #           #  cd ~/project/backend
   #           #  npm install
   #           #  Add revert code here. You can find this in the Getting Started section.
   #             exit 1
   #           fi
-            
+
 jobs:
   build-frontend:
     docker:
@@ -88,7 +88,7 @@ jobs:
           command: |
             cd frontend
             npm run test
-                
+
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -101,7 +101,7 @@ jobs:
           command: |
             cd backend
             npm run test
-            
+
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -151,7 +151,7 @@ jobs:
               --template-file .circleci/files/frontend.yml \
               --tags project=udapeople-frontend-${CIRCLE_WORKFLOW_ID} \
               --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID} \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}" 
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
 
       - run:
           name: Add url to memstash
@@ -161,12 +161,12 @@ jobs:
               --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID} \
               --query 'Stacks[0].Outputs[?'OutputKey'].OutputValue' \
               --output text)
-              
+
             echo ${WEBSITEURL}
-            
+
             curl -H "Content-Type: text/plain" -H "token:${CIRCLE_WORKFLOW_ID}" \
-            --request PUT --data "${WEBSITEURL}" https://api.memstash.io/values/websiteurl             
-      
+            --request PUT --data "${WEBSITEURL}" https://api.memstash.io/values/websiteurl
+
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -175,19 +175,19 @@ jobs:
               --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID} \
               --query 'Stacks[0].Outputs[?'OutputKey'].OutputValue' \
               --output text)
-              
+
             echo ${BACKEND_IP}
-            
+
             curl -H "Content-Type: text/plain" -H "token:${CIRCLE_WORKFLOW_ID}" \
             --request PUT --data "${BACKEND_IP}" https://api.memstash.io/values/backend_ip
-   
-      - destroy-environment 
+
+      - destroy-environment
 
       # - persist_to_workspace:
       #     root: ~/
       #     paths:
       #       - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure      
+      # Here's where you will add some code to rollback on failure
 
   configure-infrastructure:
     docker:
@@ -196,23 +196,23 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: [c7:2f:ca:31:a3:51:90:69:6e:97:03:8a:5c:77:bc:0d]
-      
+
       - run:
           name: Install Ansible
           command: |
             apk add --update ansible
             ansible --version
-      
+
       - run:
           name: Install Curl
           command: |
             apk add --update curl
-      
+
       - run:
           name: check inventory file
           command: |
             cd .circleci/ansible
-            cat inventory.txt        
+            cat inventory.txt
 
       - run:
           name: Configure server
@@ -226,9 +226,9 @@ jobs:
             echo ${BACKEND_IP} >> ./inventory.txt
             cat ./inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
-      
-  #     - destroy-environment 
-      # Here's where you will add some code to rollback on failure      
+
+  #     - destroy-environment
+      # Here's where you will add some code to rollback on failure
 
   run-migrations:
     docker:
@@ -244,28 +244,28 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build] 
-      
+          keys: [backend-build]
+
       - run:
           name: npm install
           working_directory: ./backend
-          command: |  
+          command: |
             npm install
 
       - run:
           name: install dependencies
           command: |
             npm install typescript
-            npm --update install python3 npm     
-      
+            npm --update install python3 npm
+
       - run:
-          name: Run migrations          
+          name: Run migrations
           no_output_timeout: 10m
           command: |
             cd backend
             npm run migrations >> migration_output.txt
             cat migration_output.txt
-     
+
       - run:
           name: Send migration results to memstash
           working_directory: ./backend
@@ -280,7 +280,7 @@ jobs:
               curl -H "Content-Type: text/plain" -H "token:${CIRCLE_WORKFLOW_ID}" \
               --request PUT --data "0" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
             fi
-     # Here's where you will add some code to rollback on failure      
+     # Here's where you will add some code to rollback on failure
 
 #   deploy-frontend:
 #     docker:
@@ -301,8 +301,8 @@ jobs:
 #           name: Deploy frontend objects
 #           command: |
 #             # your code here
-#       # Here's where you will add some code to rollback on failure      
-                    
+#       # Here's where you will add some code to rollback on failure
+
 #   deploy-backend:
 #     docker:
 #       # Docker image here that supports Ansible
@@ -318,11 +318,11 @@ jobs:
 #           name: Deploy backend
 #           command: |
 #             # your code here
-#       # Here's where you will add some code to rollback on failure  
+#       # Here's where you will add some code to rollback on failure
 
 #   smoke-test:
 #     docker:
-#       # Lightweight Docker image 
+#       # Lightweight Docker image
 #     steps:
 #       # Checkout code from git
 #       - run:
@@ -341,7 +341,7 @@ jobs:
 #           name: Frontend smoke test.
 #           command: |
 #             # your code here
-#       # Here's where you will add some code to rollback on failure  
+#       # Here's where you will add some code to rollback on failure
 
 #   cloudfront-update:
 #     docker:
@@ -356,7 +356,7 @@ jobs:
 #           name: Update cloudfront distribution
 #           command: |
 #             # your code here
-#       # Here's where you will add some code to rollback on failure  
+#       # Here's where you will add some code to rollback on failure
 
 # cleanup:
 #     docker:
@@ -376,7 +376,7 @@ jobs:
 #             then
 #               # your code here
 #             fi
-            
+
 
 workflows:
   default:
@@ -395,7 +395,7 @@ workflows:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
             branches:
-              only: [main]
+              only: [jack_support]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
